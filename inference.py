@@ -7,9 +7,6 @@ import torch.nn as nn
 from tqdm import tqdm
 from torch.nn import functional as F
 
-
-
-
 class ResBlock(nn.Module):
     def __init__(self, num_channel):
         super(ResBlock, self).__init__()
@@ -104,7 +101,7 @@ if __name__ == '__main__':
     model.load_state_dict(weight)
     #torch.save(model.state_dict(), 'weight.pth')
     model.eval()
-    
+
     name_list = os.listdir('images')
     name_list = [f for f in name_list if '.jpg' in f]
     if not os.path.exists('results'):
@@ -113,6 +110,7 @@ if __name__ == '__main__':
         load_path = os.path.join('images', name)
         save_path = os.path.join('results', name)
         raw_image = cv2.imread(load_path)
+        raw_image = cv2.resize(raw_image, (256,256))
         image = raw_image/127.5 - 1
         image = image.transpose(2, 0, 1)
         image = torch.tensor(image).unsqueeze(0)
@@ -123,10 +121,10 @@ if __name__ == '__main__':
         output = np.clip(output, 0, 255).astype(np.uint8)
         output = np.concatenate([raw_image, output], axis=1)
         cv2.imwrite(save_path, output)
-        
-        
-            
 
-        
-        
-    
+
+
+
+
+
+
